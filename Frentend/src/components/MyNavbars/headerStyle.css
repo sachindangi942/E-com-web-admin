@@ -1,0 +1,22 @@
+/* custom CSS to change dropdown title color */
+.custom-dropdown .dropdown-toggle {
+    color: #0D6EFD;
+}
+  
+  .custom-dropdown .dropdown-toggle:hover {
+    color: #0D6EFD;
+  }
+  
+
+  .cursor-pointer {
+    cursor: pointer;
+  }
+  
+  .navbar-brand {
+    font-size: 1.5rem;
+  }
+  
+  .shadow-sm {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  }
+  
