@@ -187,7 +187,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
-import { Button, Card, Image, notification, Spin, Modal, Form, Input } from 'antd';
+import { Button, Card, Image, notification, Spin, Form, } from 'antd';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { DOMAIN } from '../components/MyForms/Configs';
@@ -195,8 +195,10 @@ import { addToCart } from '../Redux/Fetures/CartSlice';
 import { fetchCartData } from '../components/Utils/CartApiUtils';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { DeleteProductUtils } from '../components/Utils/DeleteProductUtils';
-import { ConfirmationModal } from '../components/customConfirmation/Confirmation';
+import { CustomeModel } from '../components/customConfirmation/CustomeModel';
 import { UpdateProducts } from '../components/Utils/UpdateProducts';
+import { MyForms } from '../components/MyForms/MyForms';
+import { Loading } from '../Redux/Fetures/LoadingSlice';
 
 const { Meta } = Card;
 
@@ -274,22 +276,24 @@ export const Home = () => {
   };
 
   const showEditModal = (obj) => {
+    dispatch(Loading(true))
     setSelectedProduct(obj);
     form.setFieldsValue(obj);
+    dispatch(Loading(false));
     setIsEditModalVisible(true);
   };
 
   const handleCancelEdit = () => {
     setSelectedProduct(null);
     setIsEditModalVisible(false);
-    form.resetFields(); 
+    form.resetFields();
   };
 
   const handleUpdateProduct = async () => {
     try {
       const values = await form.validateFields();
       await UpdateProducts({ ...selectedProduct, ...values }, token);
-      await productData(); 
+      await productData();
       notification.success({
         message: 'Product Updated',
         description: 'Product updated successfully!',
@@ -372,46 +376,44 @@ export const Home = () => {
           ))}
         </Row>
       )}
-      <ConfirmationModal
-        visible={isDeleteModalVisible}
+      <CustomeModel
+        visible={isDeleteModalVisible || isEditModalVisible}
         onOk={handleDeleteProduct}
         onCancel={() => setIsDeleteModalVisible(false)}
-        title="Confirm Delete"
-        description="Are you sure you want to delete this product?"
-      />
-
-      <Modal
-        title="Edit Product"
-        open={isEditModalVisible}
-        onOk={handleUpdateProduct}
-        onCancel={handleCancelEdit}
-        okText="Update"
-        cancelText="Cancel"
+        title={isEditModalVisible ? "Edit Product" : "Confirm Delete"}
+        description={
+          isEditModalVisible
+            ? "Update the product details."
+            : "Are you sure you want to delete this product?"
+        }
+        isEditModalVisible={isEditModalVisible}
+        handleUpdateProduct={handleUpdateProduct}
+        handleCancelEdit={handleCancelEdit}
       >
-        <Form form={form} layout="vertical" name="editProductForm">
-          <Form.Item
-            label="Name"
-            name="name"
-            rules={[{ required: true, message: 'Please enter the product name!' }]}
-          >
-            <Input placeholder="Enter product name" />
-          </Form.Item>
-          <Form.Item
-            label="Price"
-            name="price"
-            rules={[{ required: true, message: 'Please enter the price!' }]}
-          >
-            <Input placeholder="Enter product price" />
-          </Form.Item>
-          <Form.Item
-            label="Quantity"
-            name="quantity"
-            rules={[{ required: true, message: 'Please enter the quantity!' }]}
-          >
-            <Input placeholder="Enter product quantity" />
-          </Form.Item>
-        </Form>
-      </Modal>
+        {isEditModalVisible &&
+          <MyForms
+            form={form}
+            fields={[
+
+              {
+                name: "price",
+                label: "Price",
+                placeholder: "Enter product price",
+                rules: [{ required: true, message: "Please enter the price!" }],
+              },
+              {
+                name: "quantity",
+                label: "Quantity",
+                placeholder: "Enter product quantity",
+                rules: [{ required: true, message: "Please enter the quantity!" }],
+              },
+            ]}
+          />
+
+        }
+      </CustomeModel>
+
+
     </Container>
   );
 };
