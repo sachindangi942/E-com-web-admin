@@ -1,7 +1,7 @@
 // import { Form, Input, Select } from "antd";
 
 // export const MyForms = ({ form, fields, onFinish, children }) => {
-  
+
 //   return (
 //     <Form form={form} onFinish={onFinish} layout="vertical" name="dynamicForm">
 //       {fields.map((field, index) => (
@@ -38,7 +38,7 @@
 
 import { Form, Input, Select } from "antd";
 
-export const MyForms = ({ form, fields, onFinish, children }) => {  
+export const MyForms = ({ form, fields, onFinish, children }) => {
   return (
     <Form form={form} onFinish={onFinish} layout="vertical" name="dynamicForm">
       {fields.map((field, index) => {
@@ -47,7 +47,12 @@ export const MyForms = ({ form, fields, onFinish, children }) => {
         return (
           <Form.Item key={index} label={field.label} name={field.name} rules={field.rules}>
             {field.type === "select" ? (
-              <Select placeholder={field.placeholder} showSearch={field.showSearch} filterOption={field.filterOption}>
+              <Select placeholder={field.placeholder}
+                showSearch={field.showSearch}
+                filterOption={field.filterOption}
+                onChange={field.onChange}
+                disabled={field.disabled}
+              >
                 {field.options?.map((option) => (
                   <Select.Option key={option.value} value={option.value}>
                     {option.label}
@@ -55,7 +60,10 @@ export const MyForms = ({ form, fields, onFinish, children }) => {
                 ))}
               </Select>
             ) : (
-              <Input placeholder={field.placeholder} />
+              <Input
+                placeholder={field.placeholder}
+                disabled={field.disabled}
+              />
             )}
           </Form.Item>
         );

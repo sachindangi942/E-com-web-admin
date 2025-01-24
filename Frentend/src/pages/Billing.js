@@ -1,7 +1,8 @@
-import { Button, Form } from "antd";
+import { Button, Form,} from "antd";
 import { Col, Container, Row } from "react-bootstrap";
 import { MyForms } from "../components/MyForms/MyForms";
 import { useSelector } from "react-redux";
+import { MyTables } from "../components/MyTables/MyTables";
 
 export const Billing = () => {
     const { products } = useSelector(state => state.product);
@@ -11,9 +12,14 @@ export const Billing = () => {
         ? products.map((product, index) => ({
             value: product._id || index,
             label: product.name || "Unknown",
+            price: product.price || "0"
         }))
         : [];
 
+    const handleProductChange = (Values) => {
+        const selectedProduct = productOptions.find(product => product.value === Values);
+        if (selectedProduct) form.setFieldsValue({ price: selectedProduct.price })
+    }
 
     const handleForm = (values) => {
         console.log("Form Values:", values);
@@ -39,12 +45,14 @@ export const Billing = () => {
                                     option && option.children
                                         ? option.children.toLowerCase().includes(input.toLowerCase())
                                         : false,
+                                onChange: handleProductChange,
                                 rules: [{ required: true, message: "Please select the product!" }],
                             },
                             {
                                 name: "price",
                                 label: "Price",
                                 placeholder: "Enter product price",
+                                disabled: true,
                                 rules: [{ required: true, message: "Please enter the price!" }],
                             },
                             {
@@ -56,11 +64,15 @@ export const Billing = () => {
                         ]}
                     >
                         <Button type="primary" htmlType="submit" className="w-100 btn btn-info">
-                            Bill
+                            Add Products
                         </Button>
                     </MyForms>
                 </Col>
-                <Col xs={12} md={7} lg={8}></Col>
+                <Col xs={12} md={7} lg={8}>
+                   <MyTables 
+                   
+                   />
+                </Col>
             </Row>
         </Container>
     );

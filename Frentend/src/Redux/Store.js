@@ -11,6 +11,7 @@ import ErrReducer from "./Fetures/ErrSlice"
 import CartReducer from "./Fetures/CartSlice";
 import productReducer from "./Fetures/ProductsSlice"
 import LoadingReducer from "./Fetures/LoadingSlice";
+import BillingReducer from "./Fetures/BillingSlice"
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -19,7 +20,8 @@ const rootReducer = combineReducers({
   err: ErrReducer,
   cart:CartReducer,
   product:productReducer,
-  loading: LoadingReducer
+  loading: LoadingReducer,
+  bill : BillingReducer
 });
 const persistConfig = {
   key: "root",
