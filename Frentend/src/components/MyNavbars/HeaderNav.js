@@ -25,19 +25,26 @@ function HeaderNav() {
   const navigate = useNavigate();
 
   const checkExp = useCallback(() => {
-    const decodedToken = jwtDecode(token);
-    const currentTime = Date.now() / 1000;
-    if (decodedToken.exp < currentTime) {
-      dispatch(clearToken());
-      navigate("/singIn");
-    } else {
-      const remainingTime = (decodedToken.exp - currentTime) * 1000;
-      setTimeout(() => {
+    try {
+      const decodedToken = jwtDecode(token);
+      const currentTime = Date.now() / 1000;
+      if (decodedToken.exp < currentTime) {
         dispatch(clearToken());
         navigate("/singIn");
-      }, remainingTime);
+      } else {
+        const remainingTime = (decodedToken.exp - currentTime) * 1000;
+        setTimeout(() => {
+          dispatch(clearToken());
+          navigate("/singIn");
+        }, remainingTime);
+      }
+    } catch (error) {
+      console.error("Invalid token:", error);
+      dispatch(clearToken());
+      navigate("/singIn");
     }
   }, [dispatch, navigate, token]);
+
 
   useEffect(() => {
     if (token) {
@@ -86,7 +93,7 @@ function HeaderNav() {
         <Navbar.Brand as={Link} to="/" className="fw-bold text-primary">
           MyShop
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" className="border-0" />
+        <Navbar.Toggle aria-controls="basic-navbar-nav" className="border-0 " />
 
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-start">
           <Nav className="me-auto align-items-start">
@@ -95,6 +102,9 @@ function HeaderNav() {
             </Nav.Link>
             <Nav.Link onClick={() => showDrawer("left")} value="addProduct" className="text-dark fw-semibold">
               Add Products
+            </Nav.Link>
+            <Nav.Link as = {Link} to  = "/billing" className="text-dark fw-semibold">
+              Bill
             </Nav.Link>
           </Nav>
           <Nav className="ms-auto ">
@@ -105,7 +115,7 @@ function HeaderNav() {
                   to="/singIn"
                   className="text-primary fw-bold"
                 >
-                  Login <LoginOutlined/>
+                  Login <LoginOutlined />
                 </Nav.Link>
               </>
             ) : (
@@ -189,4 +199,5 @@ function HeaderNav() {
 }
 
 export default HeaderNav;
+
 

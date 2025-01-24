@@ -1,50 +1,66 @@
-// import { Form, Input } from "antd"
+// import { Form, Input, Select } from "antd";
 
-// export const MyForms = ({form}) => {
-//     return (
-//         <Form form={form} layout="vertical" name="editProductForm">
-//             <Form.Item
-//                 label="Name"
-//                 name="name"
-//                 rules={[{ required: true, message: 'Please enter the product name!' }]}
+// export const MyForms = ({ form, fields, onFinish, children }) => {
+  
+//   return (
+//     <Form form={form} onFinish={onFinish} layout="vertical" name="dynamicForm">
+//       {fields.map((field, index) => (
+//         <Form.Item
+//           key={index}
+//           label={field.label}
+//           name={field.name}
+//           rules={field.rules}
+//         >
+//           {field.type === "select" ? (
+//             <Select
+//               placeholder={field.placeholder}
+//               showSearch={field.showSearch}
+//               filterOption={field.filterOption}
 //             >
-//                 <Input placeholder="Enter product name" />
-//             </Form.Item>
-//             <Form.Item
-//                 label="Price"
-//                 name="price"
-//                 rules={[{ required: true, message: 'Please enter the price!' }]}
-//             >
-//                 <Input placeholder="Enter product price" />
-//             </Form.Item>
-//             <Form.Item
-//                 label="Quantity"
-//                 name="quantity"
-//                 rules={[{ required: true, message: 'Please enter the quantity!' }]}
-//             >
-//                 <Input placeholder="Enter product quantity" />
-//             </Form.Item>
-//         </Form>
-//     )
-// }
+//               {field.options.map((option) => (
+//                 <Select.Option key={option.value} value={option.value}>
+//                   {option.label}
+//                 </Select.Option>
+//               ))}
+//             </Select>
+//           ) : (
+//             <Input placeholder={field.placeholder} />
+//           )}
+//         </Form.Item>
+//       ))}
+//       <Form.Item>{children}</Form.Item>
+//     </Form>
+//   );
+// };
 
 
 
-import { Form, Input } from "antd";
 
-export const MyForms = ({ form, fields }) => {
+import { Form, Input, Select } from "antd";
+
+export const MyForms = ({ form, fields, onFinish, children }) => {  
   return (
-    <Form form={form} layout="vertical" name="dynamicForm">
-      {fields.map((field, index) => (
-        <Form.Item
-          key={index}
-          label={field.label}
-          name={field.name}
-          rules={field.rules}
-        >
-          <Input placeholder={field.placeholder} />
-        </Form.Item>
-      ))}
+    <Form form={form} onFinish={onFinish} layout="vertical" name="dynamicForm">
+      {fields.map((field, index) => {
+        // console.log(`Field Name: ${field.name}`, "Options:", field.options);
+
+        return (
+          <Form.Item key={index} label={field.label} name={field.name} rules={field.rules}>
+            {field.type === "select" ? (
+              <Select placeholder={field.placeholder} showSearch={field.showSearch} filterOption={field.filterOption}>
+                {field.options?.map((option) => (
+                  <Select.Option key={option.value} value={option.value}>
+                    {option.label}
+                  </Select.Option>
+                ))}
+              </Select>
+            ) : (
+              <Input placeholder={field.placeholder} />
+            )}
+          </Form.Item>
+        );
+      })}
+      <Form.Item>{children}</Form.Item>
     </Form>
   );
 };

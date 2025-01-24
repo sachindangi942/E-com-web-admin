@@ -18,6 +18,7 @@ import { ChangePassword } from "./components/PasswordAPI/ChangePassword";
 import { Cart } from "./pages/Cart";
 import { ViewDetails } from "./pages/ViewDetails";
 import "./pages/Home.css"
+import { Billing } from "./pages/Billing";
 
 function App() {
   const { loading } = useSelector(state => state.alert);
@@ -83,6 +84,7 @@ function App() {
               <ViewDetails/>
             </ProtectedRoute>
           } />
+          <Route path="/billing" element = {<Billing/>} />
           <Route path="/forgotPassword" element={<ForgotPassword />} />
           <Route path="*" element={<PageNoteFound />} />
         </Routes>

@@ -199,6 +199,7 @@ import { CustomeModel } from '../components/customConfirmation/CustomeModel';
 import { UpdateProducts } from '../components/Utils/UpdateProducts';
 import { MyForms } from '../components/MyForms/MyForms';
 import { Loading } from '../Redux/Fetures/LoadingSlice';
+import { product_Data } from '../Redux/Fetures/ProductsSlice';
 
 const { Meta } = Card;
 
@@ -223,6 +224,7 @@ export const Home = () => {
       });
       setLoading(false);
       setProducts(res.data);
+      dispatch(product_Data(res.data));
     } catch (error) {
       setLoading(false);
       notification.error({
@@ -232,7 +234,7 @@ export const Home = () => {
         duration: 3,
       });
     }
-  }, [token]);
+  }, [token, dispatch]);
 
   const CartData = useCallback(async () => {
     try {
