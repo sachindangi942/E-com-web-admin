@@ -7,7 +7,7 @@ const BillingSlice = createSlice({
     },
     reducers:{
         BillData:((state,actions)=>{
-            const ProductExists =  state.Product.some(product=> product._id === actions.payload._id);
+            const ProductExists =  state.Product.some(product=> product._key === actions.payload.key);
             if(!ProductExists){
                 state.Product.push(actions.payload);
             }

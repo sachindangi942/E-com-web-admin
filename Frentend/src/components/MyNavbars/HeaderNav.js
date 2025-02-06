@@ -138,7 +138,7 @@ function HeaderNav() {
         onClose={closeDrawer}
         open={isDrawerVisible}
         className="fw-bold"
-        width={drawerPlacement === "left" ? 600 : 300}
+        width={drawerPlacement === "left" ? 400 : 300}
       >
         {drawerPlacement === "right" ?
           <>
