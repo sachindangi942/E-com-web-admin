@@ -31,9 +31,10 @@ const productsSlice = createSlice({
                     ...state.Bill[index], ...action.payload
                 };
             }
-        }
+        },
+        ClearBill:((state,action)=>state.Bill = null)
     }
 })
 
-export const { product_Data, BillData, DeleteBill,UpdateBill } = productsSlice.actions;
+export const { product_Data, BillData, DeleteBill,UpdateBill,ClearBill } = productsSlice.actions;
 export default productsSlice.reducer;

@@ -183,6 +183,7 @@ import { MyTables } from "../components/MyTables/MyTables";
 import { useState } from "react";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { BillData, DeleteBill, UpdateBill } from "../Redux/Fetures/ProductsSlice";
+import { CustomeModel } from "../components/customConfirmation/CustomeModel";
 
 export const Billing = () => {
     const dispatch = useDispatch();
@@ -191,6 +192,8 @@ export const Billing = () => {
     const [form] = Form.useForm();
     const [editingKey, setEditingKey] = useState(null);
     const [showBill, setShowBill] = useState(false);
+    const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+    const [isEditModalVisible, setIsEditModalVisible] = useState(false);
 
     const productOptions = Array.isArray(products)
         ? products.map((product, index) => ({
@@ -234,14 +237,19 @@ export const Billing = () => {
         console.log(key)
         dispatch(DeleteBill(key))
     };
-
+    const handleCancelEdit = () => {
+        setIsEditModalVisible(false)
+    }
     const handleEdit = (record) => {
+        // setIsEditModalVisible(true)
         form.setFieldsValue({
             Product: record.product,
             price: record.price,
             quantity: record.quantity,
         });
         setEditingKey(record.key);
+
+
     };
 
     const totalBill = Bill.reduce((acc, item) => acc + item.Totaleprice, 0);
@@ -340,6 +348,53 @@ export const Billing = () => {
                     )}
                 </Col>
             </Row>
+
+            <CustomeModel
+                visible={isDeleteModalVisible || isEditModalVisible}
+                onOk={handleDelete}
+                onCancel={() => setIsDeleteModalVisible(false)}
+                title={isEditModalVisible ? "Edit Product" : "Confirm Delete"}
+                description={
+                    isEditModalVisible
+                        ? "Update the product details."
+                        : "Are you sure you want to delete this product?"
+                }
+                isEditModalVisible={isEditModalVisible}
+                handleUpdateProduct={handleEdit}
+                handleCancelEdit={handleCancelEdit}
+            >
+                {isEditModalVisible &&
+                    <MyForms
+                        form={form}
+                        fields={[
+                            {
+                                name: "Product",
+                                label: "Product",
+                                placeholder: "Enter product price",
+                                disabled: true,
+                                rules: [{ required: true, message: "Please enter the price!" }],
+                            },
+                            {
+                                name: "price",
+                                label: "Price",
+                                placeholder: "Enter product price",
+                                disabled: true,
+                                rules: [{ required: true, message: "Please enter the price!" }],
+                            },
+                            {
+                                name: "quantity",
+                                label: "Quantity",
+                                placeholder: "Enter product quantity",
+                                rules: [
+                                    { required: true, message: "Please enter the quantity!" },
+                                    { type: 'number', min: 1, message: 'Quantity must be at least 1.' }
+                                ],
+                            },
+                        ]}
+                    />
+
+                }
+            </CustomeModel>
         </Container>
     );
 };
